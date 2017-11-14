@@ -13,6 +13,9 @@ library(tidyverse)
 library(httr)
 library(jsonlite)
 library(plotly)
+library(lubridate)
+library(forcats)
+library(stringr)
 
 get_all_inspections = function(url) {
   
@@ -53,11 +56,29 @@ nyc_inspections = get_all_inspections(url) %>%
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{r FA's first plot_ly}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+##organizing by most recent inspection per restaurant
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+nyc_grade_prop <- nyc_inspections %>% 
+  separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
+  select(-takeaway) %>% 
+  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
+  rename(name = dba) %>% 
+  na.omit(grade)
+
+
+#street, year, month, day) %>% 
+  
+
+
+View(nyc_grade_prop)
+
+#group_by(year, day, boro, building, street, dba) 
+
+##stuck, will go to office hours today :/
+
+```
 
 ```{r cars}
 summary(cars)
