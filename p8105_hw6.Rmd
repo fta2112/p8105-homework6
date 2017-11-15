@@ -229,3 +229,10 @@ nyc_inspections_jo_plotly = nyc_cuisine_final %>%
 nyc_inspections_jo_plotly
 
 ```
+
+shiny stuff
+```{r}
+#library(rsconnect)
+#rsconnect::deployApp('path/to/your/app')
+```
+
