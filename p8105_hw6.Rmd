@@ -91,7 +91,6 @@ dim(nyc_grade_prop)
 
  
 ##Plotly to show the distribution of scores per month (October here) per boro
-
 nyc_grade_prop %>% 
   mutate(boro = fct_reorder(boro, score)) %>% 
   group_by(boro, name) %>% 
