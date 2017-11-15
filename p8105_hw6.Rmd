@@ -16,6 +16,9 @@ library(plotly)
 library(lubridate)
 library(forcats)
 library(stringr)
+library(viridis)
+library(ggplot2)
+library(dplyr)
 
 get_all_inspections = function(url) {
   
@@ -56,40 +59,146 @@ nyc_inspections = get_all_inspections(url) %>%
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r FA's first plot_ly}
 
-##organizing by most recent inspection per restaurant
 
+```{r FA first plot_ly}
+
+##cleaning up and filtering out
+
+
+
+##selecting and editing variables, filtering year and boro
 nyc_grade_prop <- nyc_inspections %>% 
+  as.data.frame(nyc_inspections) %>% 
   separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
   select(-takeaway) %>% 
   separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
   rename(name = dba) %>% 
-  na.omit(grade)
+  na.omit(grade) %>% 
+  mutate(score = as.numeric(score)) %>% 
+  select(year, month, day, boro, name, score, grade) %>% 
+  filter(year == "2017",
+         month == "10")
 
 
-#street, year, month, day) %>% 
-  
+dim(nyc_grade_prop)
+str(nyc_grade_prop) 
+
+##you can only do order on a vector?
 
 
 View(nyc_grade_prop)
+dim(nyc_grade_prop)
 
-#group_by(year, day, boro, building, street, dba) 
+ 
+##Plotly to show the distribution of scores per month (October here) per boro
 
-##stuck, will go to office hours today :/
+nyc_grade_prop %>% 
+  mutate(boro = fct_reorder(boro, score)) %>% 
+  group_by(boro, name) %>% 
+  plot_ly(y = ~score, color = ~boro, type = "box",
+          colors = "Set2") 
+
+##interactivity option: being able to change the month via drop down menu?
+
+## need to remove boro values labeled as Missing!!!!!
+
+
+
+##hover text should show Grade and restaurant name? ALso need to make points a lot smaller!
+
+##Recall, higher scores are worse!
+
+
+
 
 ```
 
-```{r cars}
-summary(cars)
+```{r FA plotly two}
+
+##cleaning up data for second plotly 
+
+  nyc_grade_prop2 <- nyc_inspections %>% 
+  as.data.frame(nyc_inspections) %>% 
+  separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
+  select(-takeaway) %>% 
+  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
+  rename(name = dba) %>% 
+  na.omit(grade) %>% 
+  mutate(score = as.numeric(score),
+         month = as.numeric(month)) %>% 
+  select(camis, year, month, day, boro, name, score, grade, cuisine_description) %>% 
+  filter(year == "2016",
+         cuisine_description %in% c("Chicken", "Hamburgers", "Vegetarian")) %>%
+  mutate(month = as.factor(month)) 
+
+##cami is unique identifier, sum all scores from same day bc they belong to same inspection
+
+##then remove duplicates
+
+p <- nyc_grade_prop2 %>% 
+  group_by(camis, month, day) %>% 
+  mutate(total_score = sum(score)) %>% 
+  select(-score) %>% 
+  unique()
+
+  
+# graph comparing average scores of three cuisines in 2016
+ q <- p %>% 
+  group_by(month, cuisine_description) %>% 
+  summarize(mean_score = mean(total_score)) %>% 
+  ggplot(aes(x = month, y = mean_score, color = cuisine_description)) +
+    geom_point() + geom_line() +
+    theme(legend.position = "bottom")
+
+  
+  ggplotly(q)
+  
+
+
+##Need to change month column from numbers to Jan/Feb/Mar etc...! are factors
+  
+  ##Interactivity idea:  Plot two cuisines at a time to see who has lower (better) mean scores per month: Hamburgers v  Vegetarian, Chicken v Hamburgers, Hamburgers v Chicken (like three button choices)
+  
+  ##I have to relabel axes, add lines!
+
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r last test plotly}
+
+##this is an experimental plot, to see if i could do it
+##distributions of cuisines of Manhattan inspections over  2017
+##supposed to be a bar plot
+
+
+nyc_grade_prop3<- nyc_inspections %>% 
+  as.data.frame(nyc_inspections) %>% 
+  separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
+  select(-takeaway) %>% 
+  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
+  rename(name = dba) %>% 
+  mutate(score = as.numeric(score)) %>% 
+  select(camis, year, month, day, boro, name, score, cuisine_description, grade) %>% 
+  group_by(camis, year, month, day) %>% 
+  mutate(total_score = sum(score)) %>% 
+  select(-score) %>% 
+  filter(year == "2017",
+         boro == "MANHATTAN") %>% 
+  unique() 
+  
+  View(nyc_grade_prop3)
+
+  ##doesn't work right :/ this plot will likely be deleted, 
+  nyc_grade_prop3 %>% 
+  count(cuisine_description) %>% 
+  mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
+  plot_ly(x = ~cuisine_description, y = ~n, color = ~cuisine_description, type = "bar") 
+  
+
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
