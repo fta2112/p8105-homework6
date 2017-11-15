@@ -200,6 +200,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 Josie
 ```{r Mice/Rats/Roaches, warning = FALSE, message = FALSE}
 #Among restaurants with mice, roaches or flies in violation, show distribution of scores based on cuisine
+#fill by grade
 nyc_inspections_jo = nyc_inspections %>%
   filter(grade %in% c("A", "B", "C"), boro != "Missing") %>% 
   mutate(borough = str_to_title(boro)) %>%
@@ -207,7 +208,7 @@ nyc_inspections_jo = nyc_inspections %>%
   select(borough, cuisine_description, dba, score, grade, violation_description) %>%
   filter(score > '0') %>% #eliminate restaurants without an inspection (0) and those with -1
   filter(str_detect(violation_description, regex("mice", ignore_case = TRUE)) | str_detect(violation_description, regex("flies", ignore_case = TRUE)) | str_detect(violation_description, regex("roach", ignore_case = TRUE))) 
-#top 10 cuisines 
+#top 8 cuisines 
 top_cuisines = nyc_inspections_jo %>%
   count(cuisine_description, sort = TRUE) %>% 
   top_n(8) %>% 
@@ -215,6 +216,13 @@ top_cuisines = nyc_inspections_jo %>%
 #join nyc_inspections_jo and top_cuisines
 nyc_cuisine_final = inner_join(nyc_inspections_jo, top_cuisines, by = "cuisine_description")
 
+#barchart
+nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
+  mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
+  plot_ly(x = ~cuisine_description, y = ~score, color = ~grade, type = "bar")
+nyc_inspections_jo_plotly
+  
+#boxplot
 nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
   mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
   plot_ly(y = ~score, color = ~cuisine_description, type = "box",

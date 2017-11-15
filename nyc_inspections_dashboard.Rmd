@@ -1,4 +1,5 @@
-title: "NYC Inspections Dashboard"
+---
+title: "NYC Restaurant Inspections"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -7,15 +8,6 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-```
-
-```{r}
-library(tidyverse)
-library(janitor)
-library(stringr)
-library(forcats)
-library(viridis)
-library(plotly)
 ```
 
 Column {data-width=650}
@@ -41,3 +33,4 @@ Column {data-width=350}
 ```{r}
 
 ```
+
