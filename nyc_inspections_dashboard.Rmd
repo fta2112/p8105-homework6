@@ -20,7 +20,7 @@ library(ggplot2)
 library(dplyr)
 ```
 
-```{r}
+```{r, echo = FALSE}
 get_all_inspections = function(url) {
   
   all_inspections = vector("list", length = 0)
@@ -58,10 +58,8 @@ nyc_inspections = get_all_inspections(url) %>%
 
 
 knitr::opts_chunk$set(echo = TRUE)
-```
 
 
-```{r Plot One Tidy, warning = FALSE, message = FALSE}
 ##cleaning up and filtering out
 ##selecting and editing variables, filtering year and boro
 nyc_grade_prop <- nyc_inspections %>% 
@@ -78,7 +76,6 @@ nyc_grade_prop <- nyc_inspections %>%
          month == "10") %>% 
   unique()
 ##you can only do order on a vector?
-dim(nyc_grade_prop)
 ##Plotly to show the distribution of scores per month (October here) per boro
 nyc_grade_prop %>% 
   mutate(boro = fct_reorder(boro, score)) %>% 
@@ -88,9 +85,7 @@ nyc_grade_prop %>%
 ##interactivity option: being able to change the month via drop down menu?
 ##hover text should show Grade and restaurant name? 
 ##Recall, higher scores are worse!
-```
 
-```{r Plot Two Tidy, warning = FALSE, message = FALSE}
 ##cleaning up data for second plotly 
 ##observations from same inspection are placed on repeated rows, and total score gets repeated. Using cami as unique identifier, removing the duplicate scores from each individual inspection
 ##filtering out for year and specific cuisines
@@ -112,9 +107,7 @@ mutate(month = as.factor(month)) %>%
 # plotly line graph comparing average scores of three cuisines in 2016
 ##Interactivity idea:  Plot two cuisines at a time to see who has lower (better) mean scores per month: Hamburgers v  Vegetarian, Chicken v Hamburgers, Hamburgers v Chicken (like three button choices)
 ##I have to relabel axes, add lines!
-```
 
-```{r Plot Three Tidy, warning = FALSE, message = FALSE}
 #Among restaurants with mice, roaches or flies in violation, show distribution of scores based on cuisine
 #fill by grade
 nyc_inspections_jo = nyc_inspections %>%
@@ -131,17 +124,12 @@ top_cuisines = nyc_inspections_jo %>%
   select(cuisine_description) 
 #join nyc_inspections_jo and top_cuisines
 nyc_cuisine_final = inner_join(nyc_inspections_jo, top_cuisines, by = "cuisine_description")
-
-#barchart
-nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
-  mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
-  plot_ly(x = ~cuisine_description, y = ~score, color = ~grade, type = "bar")
 ```
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### Scatterplot
 
 ```{r}
 ##Plotly to show the distribution of scores per month (October here) per boro
@@ -155,7 +143,7 @@ nyc_grade_prop %>%
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Boxplot
 
 ```{r}
 ##ggplot for mean score per cuisine per month
@@ -167,13 +155,12 @@ p <- nyc_grade_prop2 %>%
     theme(legend.position = "bottom")
 ```
 
-### Chart C
+### Barchart
 
 ```{r}
 #barchart
 nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
   mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
   plot_ly(x = ~cuisine_description, y = ~score, color = ~grade, type = "bar")
-nyc_inspections_jo_plotly
 ```
 
