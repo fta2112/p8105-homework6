@@ -1,0 +1,22 @@
+---
+title: "NYC Restaurant Inspections"
+---
+###
+## Homework Six: Interactivity (plotly, flexdashboard and Shiny)
+###Feben Asefaha and Josie Alford
+###
+##describe data that we used
+
+##relevant processing steps
+
+##link to flexdashboard
+This is our [flexdashboard](nyc_inspections_dashboard.html).
+##link to shiny-enabled dashboard
+This is our [shiny-enabled dashboard]()
+#link to the Github repos
+###flexdashboard (problem 1)
+###shiny enabled dashboard (problem 2)
+
+Want to know more about me? Check out my [About Me page](about.html)!
+
+Interested in my academic experiences? I have [a resume](resume.html).
