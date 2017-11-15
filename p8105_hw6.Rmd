@@ -86,7 +86,7 @@ nyc_grade_prop <- nyc_inspections %>%
 ##you can only do order on a vector?
 
 
-View(nyc_grade_prop)
+
 dim(nyc_grade_prop)
 
  
@@ -160,44 +160,6 @@ ggplotly(p)
 ```
 
 
-
-```{r last test plotly, warning = FALSE, message = FALSE}
-
-##this is an experimental plot, to see if i could do it
-##distributions of cuisines of Manhattan inspections over  2017
-##supposed to be a bar plot
-
-
-nyc_grade_prop3<- nyc_inspections %>% 
-  as.data.frame(nyc_inspections) %>% 
-  separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
-  select(-takeaway) %>% 
-  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
-  rename(name = dba) %>% 
-  mutate(score = as.numeric(score)) %>% 
-  select(camis, year, month, day, boro, name, score, cuisine_description, grade) %>% 
-  group_by(camis, year, month, day) %>% 
-  mutate(total_score = sum(score)) %>% 
-  select(-score) %>% 
-  filter(year == "2017",
-         boro == "MANHATTAN") %>% 
-  unique() 
-  
-  #View(nyc_grade_prop3)
-
-  ##doesn't work right :/ this plot will likely be deleted, 
-  nyc_grade_prop3 %>% 
-  count(cuisine_description) %>% 
-  mutate(cuisine_description = fct_reorder(cuisine_description, n)) %>% 
-  plot_ly(x = ~cuisine_description, y = ~n, color = ~cuisine_description, type = "bar") 
-  
-
-
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-Josie
 ```{r Mice/Rats/Roaches, warning = FALSE, message = FALSE}
 #Among restaurants with mice, roaches or flies in violation, show distribution of scores based on cuisine
 #fill by grade
@@ -223,11 +185,11 @@ nyc_inspections_jo_plotly = nyc_cuisine_final %>%
 nyc_inspections_jo_plotly
   
 #boxplot
-nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
-  mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
-  plot_ly(y = ~score, color = ~cuisine_description, type = "box",
-          colors = "Set1")
-nyc_inspections_jo_plotly
+#nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
+  #mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
+  #plot_ly(y = ~score, color = ~cuisine_description, type = "box",
+          #colors = "Set1")
+#nyc_inspections_jo_plotly
 
 ```
 
