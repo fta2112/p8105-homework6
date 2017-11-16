@@ -130,6 +130,7 @@ top_cuisines = nyc_inspections_jo %>%
   select(cuisine_description) 
 #join nyc_inspections_jo and top_cuisines
 nyc_cuisine_final = inner_join(nyc_inspections_jo, top_cuisines, by = "cuisine_description")
+
 ```
 
 Column {data-width=650}
