@@ -3,18 +3,18 @@ title: "Data Science I Homework 6"
 ---
 # Josie Alford (jma2249) and Feben Asefaha (fta2112)
 ## Interactivity (plotly, flexdashboard and Shiny)
-### NYC Restaurant Inspections
+## NYC Restaurant Inspections
 
 ### Data Description and Processing
-This dataset from the New York City Department of Health and Mental Hygiene (DOHMH) contains information on surprise inspections conducted on city-wide food establishments. We filtered for the year 2016, the most recent and complete year.
+This [dataset](http://jeffgoldsmith.com/DSI/dataset_restaurant_inspections.html) from the New York City Department of Health and Mental Hygiene (DOHMH) contains information on surprise inspections conducted on city-wide food establishments. We filtered for the year 2016, the most recent and complete year.
 We extracted variables relevant to our plots (unique restuarant ids, cuisine description, date of inspection, grade, score and borough). 
 
 ### Plot Description
-The boxplot demonstrates the distribution of numerical inspection scores given to the food establishments of the five boroughs. Scores increase as violations do, so the lower the score, the better. Manhattan had the establishment with the worst score of the year (83), but the borough also had the lowest median score (along with Queens).
+The [boxplot](nyc_inspections_dashboard.html) demonstrates the distribution of numerical inspection scores given to the food establishments of the five boroughs. Scores increase as violations do, so the lower the score, the better. Manhattan had the establishment with the worst score of the year (83), but the borough also had the lowest median score (along with Queens).
 
-The scatterplot compares the mean score per month given to establishments from three cuisine types: Chicken, Hamburgers, and Vegetarian. Chicken restaurants generally fared the worst out of the three over the whole year, while Vegetarian and Hamburger restaurants oscillated between lowest scores from month to month. 
+The [scatterplot](nyc_inspections_dashboard.html) compares the mean score per month given to establishments from three cuisine types: Chicken, Hamburgers, and Vegetarian. Chicken restaurants generally fared the worst out of the three over the whole year, while Vegetarian and Hamburger restaurants oscillated between lowest scores from month to month. 
 
-The bar chart illustrates the distribution of health scores of restaurants with pest-related violations (flies, roaches, mice) in 2016, partitioned by letter grades of A, B or C and the top eight most popular cuisines in all boroughs. For example, NYC American-cuisine restaurants who received a pest-related violation but still got an A grade had an average score of 11.1, while those who received a grade of B had an average score of 19.9. Finally, those who receive a C grade had an average score of 37.8.
+The [bar chart](nyc_inspections_dashboard.html) illustrates the distribution of health scores of restaurants with pest-related violations (flies, roaches, mice) in 2016, partitioned by letter grades of A, B or C and the top eight most popular cuisines in all boroughs. For example, NYC American-cuisine restaurants who received a pest-related violation but still got an A grade had an average score of 11.1, while those who received a grade of B had an average score of 19.9. Finally, those who receive a C grade had an average score of 37.8.
 
 ## Flexdashboard
 This is our interactive [flexdashboard](nyc_inspections_dashboard.html) with plotly. The GitHub repo and associated code for this homework can be found [here](https://github.com/fta2112/p8105-homework6).

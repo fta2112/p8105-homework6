@@ -11,7 +11,7 @@
 
 
 
-<title>NYC Restaurant Inspections</title>
+<title>Data Science I Homework 6</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,10 +180,13 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="p8105_hw6.html">plotly</a>
+  <a href="p8105_hw6.html">plotly code</a>
 </li>
 <li>
   <a href="nyc_inspections_dashboard.html">dashboard</a>
+</li>
+<li>
+  <a href="https://fta2112.shinyapps.io/p8105_hw6_shiny/">shiny-enabled dashboard</a>
 </li>
 <li>
   <a href="mailto:&lt;josiealford14@youremail.com&gt;">
@@ -197,6 +200,12 @@ $(document).ready(function () {
      
   </a>
 </li>
+<li>
+  <a href="https://github.com/josiealford14/p8105_hw6_shiny">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -206,34 +215,37 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">NYC Restaurant Inspections</h1>
+<h1 class="title toc-ignore">Data Science I Homework 6</h1>
 
 </div>
 
 
-<div id="section" class="section level3">
-<h3></h3>
+<div id="josie-alford-jma2249-and-feben-asefaha-fta2112" class="section level1">
+<h1>Josie Alford (jma2249) and Feben Asefaha (fta2112)</h1>
+<div id="interactivity-plotly-flexdashboard-and-shiny" class="section level2">
+<h2>Interactivity (plotly, flexdashboard and Shiny)</h2>
 </div>
-<div id="homework-six-interactivity-plotly-flexdashboard-and-shiny" class="section level2">
-<h2>Homework Six: Interactivity (plotly, flexdashboard and Shiny)</h2>
-<div id="feben-asefaha-and-josie-alford" class="section level3">
-<h3>Feben Asefaha and Josie Alford</h3>
+<div id="nyc-restaurant-inspections" class="section level2">
+<h2>NYC Restaurant Inspections</h2>
+<div id="data-description-and-processing" class="section level3">
+<h3>Data Description and Processing</h3>
+<p>This <a href="http://jeffgoldsmith.com/DSI/dataset_restaurant_inspections.html">dataset</a> from the New York City Department of Health and Mental Hygiene (DOHMH) contains information on surprise inspections conducted on city-wide food establishments. We filtered for the year 2016, the most recent and complete year. We extracted variables relevant to our plots (unique restuarant ids, cuisine description, date of inspection, grade, score and borough).</p>
 </div>
-<div id="section-1" class="section level3">
-<h3></h3>
+<div id="plot-description" class="section level3">
+<h3>Plot Description</h3>
+<p>The <a href="nyc_inspections_dashboard.html">boxplot</a> demonstrates the distribution of numerical inspection scores given to the food establishments of the five boroughs. Scores increase as violations do, so the lower the score, the better. Manhattan had the establishment with the worst score of the year (83), but the borough also had the lowest median score (along with Queens).</p>
+<p>The <a href="nyc_inspections_dashboard.html">scatterplot</a> compares the mean score per month given to establishments from three cuisine types: Chicken, Hamburgers, and Vegetarian. Chicken restaurants generally fared the worst out of the three over the whole year, while Vegetarian and Hamburger restaurants oscillated between lowest scores from month to month.</p>
+<p>The <a href="nyc_inspections_dashboard.html">bar chart</a> illustrates the distribution of health scores of restaurants with pest-related violations (flies, roaches, mice) in 2016, partitioned by letter grades of A, B or C and the top eight most popular cuisines in all boroughs. For example, NYC American-cuisine restaurants who received a pest-related violation but still got an A grade had an average score of 11.1, while those who received a grade of B had an average score of 19.9. Finally, those who receive a C grade had an average score of 37.8.</p>
 </div>
 </div>
-<div id="describe-data-that-we-used" class="section level2">
-<h2>describe data that we used</h2>
+<div id="flexdashboard" class="section level2">
+<h2>Flexdashboard</h2>
+<p>This is our interactive <a href="nyc_inspections_dashboard.html">flexdashboard</a> with plotly. The GitHub repo and associated code for this homework can be found <a href="https://github.com/fta2112/p8105-homework6">here</a>.</p>
 </div>
-<div id="relevant-processing-steps" class="section level2">
-<h2>relevant processing steps</h2>
+<div id="shiny-enabled-dashboard" class="section level2">
+<h2>Shiny-enabled dashboard</h2>
+<p>This is our <a href="https://fta2112.shinyapps.io/p8105_hw6_shiny/">shiny-enabled dashboard</a>. The GitHub repo and associated code for the Shiny-enabled dashboard specifically is located <a href="https://github.com/josiealford14/p8105_hw6_shiny">here</a>.</p>
 </div>
-<div id="link-to-flexdashboard" class="section level2">
-<h2>link to flexdashboard</h2>
-<p>This is our <a href="nyc_inspections_dashboard.html">flexdashboard</a>. ##link to shiny-enabled dashboard This is our <a href="">shiny-enabled dashboard</a> #link to the Github repos ###flexdashboard (problem 1) ###shiny enabled dashboard (problem 2)</p>
-<p>Want to know more about me? Check out my <a href="about.html">About Me page</a>!</p>
-<p>Interested in my academic experiences? I have <a href="resume.html">a resume</a>.</p>
 </div>
 
 
