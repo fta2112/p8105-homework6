@@ -108,7 +108,6 @@ nyc_inspections %>%
 ### Barchart
 
 ```{r}
-
 top_cuisines = nyc_inspections %>%
   count(cuisine_description, sort = TRUE) %>% 
   top_n(8) %>% 
@@ -121,6 +120,7 @@ nyc_inspections %>%
                                                      TRUE))) %>%
   inner_join(top_cuisines, by = "cuisine_description") %>%
   mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
+  mutate(cuisine_description = fct_infreq(cuisine_description)) %>%
   group_by(cuisine_description, grade) %>%
   summarize(mean_score = mean(score)) %>%
   plot_ly(x = ~cuisine_description, y = ~mean_score, color = ~grade, type = "bar")
