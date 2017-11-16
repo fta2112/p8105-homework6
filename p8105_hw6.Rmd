@@ -107,7 +107,8 @@ ggplotly(p)
 
 
 ```{r Mice/Rats/Roaches, warning = FALSE, message = FALSE}
-#among restaurants with pest-related violations (flies, roaches, mice), what is the distribution of scores? partioned by letter grades of A, B or C and by most popular cuisines in all boroughs (top 8)
+#among restaurants with pest-related violations (flies, roaches, mice) in 2016, what is the distribution of scores? partioned by letter grades of A, B or C and by most popular cuisines in all boroughs (top 8)
+#Interpretation (example, American): Among NYC American restaurants who were evaluated in 2016 and recieved a pest-related violation, those who recieved a grade of A had an average score of 11.1, those who recieved a grade of B had an average score of 19.9, and those with a C had an average score of 37.8.
 #top 8 cuisines 
 top_cuisines = nyc_inspections %>%
   count(cuisine_description, sort = TRUE) %>% 
@@ -121,7 +122,9 @@ nyc_inspections %>%
                                                      TRUE))) %>%
   inner_join(top_cuisines, by = "cuisine_description") %>%
   mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
-  plot_ly(x = ~cuisine_description, y = ~score, color = ~grade, type = "bar")
+  group_by(cuisine_description, grade) %>%
+  summarize(mean_score = mean(score)) %>%
+  plot_ly(x = ~cuisine_description, y = ~mean_score, color = ~grade, type = "bar")
 
 #barchart
 #nyc_inspections_jo_plotly = nyc_cuisine_final %>% 

@@ -20,7 +20,7 @@ library(ggplot2)
 library(dplyr)
 ```
 
-```{r, echo = FALSE}
+```{r}
 get_all_inspections = function(url) {
   
   all_inspections = vector("list", length = 0)
@@ -54,107 +54,52 @@ get_all_inspections = function(url) {
 url = "https://data.cityofnewyork.us/resource/9w7m-hzhe.json"
 
 nyc_inspections = get_all_inspections(url) %>%
-  bind_rows() 
-
-
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r Plot One Tidy, warning = FALSE, message = FALSE, echo = FALSE}
-##cleaning up and filtering out
-##selecting and editing variables, filtering year and boro
-nyc_grade_prop <- nyc_inspections %>% 
-  as.data.frame(nyc_inspections) %>% 
+  bind_rows() %>% 
+  as.data.frame() %>% 
   filter(grade %in% c("A", "B", "C"), boro != "Missing") %>% 
   separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
   select(-takeaway) %>% 
-  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
-  rename(name = dba) %>% 
-  na.omit(grade) %>% 
-  mutate(score = as.numeric(score)) %>% 
-  select(camis, year, month, day, boro, name, score, grade) %>% 
-  filter(year == "2017",
-         month == "10") %>% 
-  unique()
-##you can only do order on a vector?
-##Plotly to show the distribution of scores per month (October here) per boro
-nyc_grade_prop %>% 
-  mutate(boro = fct_reorder(boro, score)) %>% 
-  group_by(boro, name) %>% 
-  plot_ly(y = ~score, color = ~boro, type = "box",
-          colors = "Set2") 
-##interactivity option: being able to change the month via drop down menu?
-##hover text should show Grade and restaurant name? 
-##Recall, higher scores are worse!
-```
-
-```{r Plot Two Tidy, warning = FALSE, message = FALSE}
-##cleaning up data for second plotly 
-##observations from same inspection are placed on repeated rows, and total score gets repeated. Using cami as unique identifier, removing the duplicate scores from each individual inspection
-##filtering out for year and specific cuisines
-  nyc_grade_prop2 <- nyc_inspections %>% 
-  as.data.frame(nyc_inspections) %>% 
-  separate(grade_date, into = c("grade_date", "takeaway"), sep = "T") %>%
-  select(-takeaway) %>% 
-  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>% 
-  rename(name = dba) %>% 
+  separate(grade_date, into = c("year", "month", "day"), sep = "-") %>%
+  mutate(month = as.numeric(month),
+         month = as.factor(month)) %>% 
+  rename(name = dba,
+         borough = boro) %>% 
   na.omit(grade) %>% 
   mutate(score = as.numeric(score),
-         month = as.numeric(month)) %>% 
-  select(camis, year, month, day, boro, name, score, grade, cuisine_description) %>% 
+         borough = str_to_title(borough)) %>%
+  select(camis, year, month, day, borough, name, cuisine_description, score, grade, 
+         violation_description) %>% 
   filter(year == "2016",
-         cuisine_description %in% c("Chicken", "Hamburgers", "Vegetarian")) %>%
-mutate(month = month.abb[month]) %>% 
-mutate(month = as.factor(month)) %>% 
-  unique()
-# plotly line graph comparing average scores of three cuisines in 2016
-##Interactivity idea:  Plot two cuisines at a time to see who has lower (better) mean scores per month: Hamburgers v  Vegetarian, Chicken v Hamburgers, Hamburgers v Chicken (like three button choices)
-##I have to relabel axes, add lines!
-```
+         score > "0")
 
-```{r Plot Three Tidy, warning = FALSE, message = FALSE}
-#Among restaurants with mice, roaches or flies in violation, show distribution of scores based on cuisine
-#fill by grade
-nyc_inspections_jo = nyc_inspections %>%
-  filter(grade %in% c("A", "B", "C"), boro != "Missing") %>% 
-  mutate(borough = str_to_title(boro)) %>%
-  mutate(score = as.integer(score)) %>%
-  select(borough, cuisine_description, dba, score, grade, violation_description) %>%
-  filter(score > '0') %>% #eliminate restaurants without an inspection (0) and those with -1
-  filter(str_detect(violation_description, regex("mice", ignore_case = TRUE)) | str_detect(violation_description, regex("flies", ignore_case = TRUE)) | str_detect(violation_description, regex("roach", ignore_case = TRUE))) 
-#top 8 cuisines 
-top_cuisines = nyc_inspections_jo %>%
+top_cuisines = nyc_inspections %>%
   count(cuisine_description, sort = TRUE) %>% 
   top_n(8) %>% 
   select(cuisine_description) 
-#join nyc_inspections_jo and top_cuisines
-nyc_cuisine_final = inner_join(nyc_inspections_jo, top_cuisines, by = "cuisine_description")
-
 ```
 
-Column {data-width=650}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### Scatterplot
 
 ```{r}
 ##Plotly to show the distribution of scores per month (October here) per boro
-nyc_grade_prop %>% 
-  mutate(boro = fct_reorder(boro, score)) %>% 
-  group_by(boro, name) %>% 
-  plot_ly(y = ~score, color = ~boro, type = "box",
+nyc_inspections %>% 
+  mutate(borough = fct_reorder(borough, score)) %>% 
+  group_by(borough, name) %>% 
+  plot_ly(y = ~score, color = ~borough, type = "box",
           colors = "Set2") 
 ```
 
-Column {data-width=350}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
 ### Boxplot
 
 ```{r}
 ##ggplot for mean score per cuisine per month
-p <- nyc_grade_prop2 %>% 
+nyc_inspections %>% 
   group_by(month, cuisine_description) %>% 
   summarize(mean_score = mean(score)) %>% 
   ggplot(aes(x = month, y = mean_score, color = cuisine_description)) +
@@ -165,9 +110,15 @@ p <- nyc_grade_prop2 %>%
 ### Barchart
 
 ```{r}
-#barchart
-nyc_inspections_jo_plotly = nyc_cuisine_final %>% 
+nyc_inspections %>% 
+  filter(str_detect(violation_description, regex("mice", ignore_case = TRUE)) |
+           str_detect(violation_description, regex("flies", ignore_case = TRUE))
+         | str_detect(violation_description, regex("roach", ignore_case =
+                                                     TRUE))) %>%
+  inner_join(top_cuisines, by = "cuisine_description") %>%
   mutate(cuisine_description = fct_reorder(cuisine_description, score)) %>%
-  plot_ly(x = ~cuisine_description, y = ~score, color = ~grade, type = "bar")
+  group_by(cuisine_description, grade) %>%
+  summarize(mean_score = mean(score)) %>%
+  plot_ly(x = ~cuisine_description, y = ~mean_score, color = ~grade, type = "bar")
 ```
 
