@@ -70,7 +70,9 @@ nyc_inspections = get_all_inspections(url) %>%
   select(camis, year, month, day, borough, name, cuisine_description, score, grade, 
          violation_description) %>% 
   filter(year == "2016",
-         score > "0")
+         score > "0",
+         grade == "A",
+         borough == "Bronx")
 ##final dataset
 knitr::opts_chunk$set(echo = TRUE)
 ```
