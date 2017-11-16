@@ -62,6 +62,7 @@ nyc_inspections = get_all_inspections(url) %>%
   separate(grade_date, into = c("year", "month", "day"), sep = "-") %>%
   mutate(month = as.numeric(month),
          month = as.factor(month)) %>% 
+  mutate(cuisine_description = recode(cuisine_description, "CafÃ©/Coffee/Tea" = "Cafe", "Latin (Cuban, Dominican, Puerto Rican, South & Central American)" = "Latin")) %>%
   rename(name = dba,
          borough = boro) %>% 
   na.omit(grade) %>% 
@@ -81,7 +82,7 @@ top_cuisines = nyc_inspections %>%
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Scatterplot
+### Boxplot
 
 ```{r}
 ##Plotly to show the distribution of scores per month (October here) per boro
@@ -95,16 +96,15 @@ nyc_inspections %>%
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Boxplot
+### Scatterplot
 
 ```{r}
-##ggplot for mean score per cuisine per month
 nyc_inspections %>% 
+  filter(cuisine_description %in% c("Chicken", "Hamburgers", "Vegetarian")) %>%
+  unique() %>% 
   group_by(month, cuisine_description) %>% 
   summarize(mean_score = mean(score)) %>% 
-  ggplot(aes(x = month, y = mean_score, color = cuisine_description)) +
-    geom_point() + geom_line()
-    theme(legend.position = "bottom")
+  plot_ly(x = ~month, y = ~mean_score, color = ~cuisine_description, type = "scatter") 
 ```
 
 ### Barchart
