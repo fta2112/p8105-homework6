@@ -83,25 +83,27 @@ nyc_inspections %>%
   group_by(borough, name) %>% 
   plot_ly(y = ~score, color = ~borough, type = "box",
           colors = "Set2") 
-##just plotted the whole year on here, why not
+
+##Interpretation: This graph demonstrates the distribution of numerical inspection scores given in 2016 to the food establishments of the five boroughs. Scores increase as violations do, so the lower the score, the better. Manhattan had the establishment with the worst score of the year (83), but the borough also had the lowest median score (along with Queens).
+
 ##interactivity option: being able to change the month via drop down menu?
 ```
 
 ```{r FA plotly two, warning = FALSE, message = FALSE}
 ## Using cami as unique identifier, removing the duplicate scores from each individual inspection
-##ggplot for mean score per cuisine per month
-  p <- nyc_inspections %>% 
+
+##plotly for mean score per cuisine per month
+nyc_inspections %>% 
   filter(cuisine_description %in% c("Chicken", "Hamburgers", "Vegetarian")) %>%
   unique() %>% 
   group_by(month, cuisine_description) %>% 
   summarize(mean_score = mean(score)) %>% 
-  ggplot(aes(x = month, y = mean_score, color = cuisine_description)) +
-    geom_point() + geom_line()
-    theme(legend.position = "bottom") 
+  plot_ly(x = ~month, y = ~mean_score, color = ~cuisine_description, type = "scatter") 
 
-# plotly line graph comparing average scores of three cuisines in 2016
-ggplotly(p)
-##Interactivity idea:  Plot two cuisines at a time to see who has lower (better) mean scores per month: Hamburgers v  Vegetarian, Chicken v Hamburgers, Hamburgers v Chicken (like three button choices)
+##Interpretation: This graph compares the mean score per month given to establishments from three cuisine types: Chicken, Hamburgers, and Vegetarian. Chicken restaurants generally fared the worst out of the three over the whole year, while Vegetarian and Hamburger restaurants oscillated between lowest scores from month to month. 
+
+## CANNOT figure out how to add lines within plotly, can't spend any more time on this until after we get dashboard working
+
 ##I have to relabel axes, add lines!
 ```
 
