@@ -73,10 +73,8 @@ nyc_inspections = get_all_inspections(url) %>%
   filter(year == "2016",
          score > "0")
 
-top_cuisines = nyc_inspections %>%
-  count(cuisine_description, sort = TRUE) %>% 
-  top_n(8) %>% 
-  select(cuisine_description) 
+
+
 ```
 
 Column {data-width=500}
@@ -110,6 +108,12 @@ nyc_inspections %>%
 ### Barchart
 
 ```{r}
+
+top_cuisines = nyc_inspections %>%
+  count(cuisine_description, sort = TRUE) %>% 
+  top_n(8) %>% 
+  select(cuisine_description) 
+
 nyc_inspections %>% 
   filter(str_detect(violation_description, regex("mice", ignore_case = TRUE)) |
            str_detect(violation_description, regex("flies", ignore_case = TRUE))
